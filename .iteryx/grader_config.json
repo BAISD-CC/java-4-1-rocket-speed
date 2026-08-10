@@ -1,0 +1,172 @@
+{
+  "schema": "iteryx/java-grader/v1",
+
+  "assignmentName": "Ch. 4 Challenge 1",
+
+  "project": {
+    "workingDirectory": ".",
+    "mainFile": "src/RocketSpeed.java",
+    "mainClass": "RocketSpeed",
+    "outputDirectory": ".iteryx/out",
+    "compileCommand": [
+      "javac",
+      "-d",
+      ".iteryx/out",
+      "src/RocketSpeed.java"
+    ],
+    "runCommand": [
+      "java",
+      "-cp",
+      ".iteryx/out",
+      "RocketSpeed"
+    ]
+  },
+
+  "settings": {
+    "compileTimeoutSeconds": 30,
+    "runTimeoutSeconds": 10,
+    "defaultCaseSensitive": false,
+    "defaultNormalizeWhitespace": true
+  },
+
+  "helpTopics": {
+    "scanner": {
+      "title": "Scanner Input",
+      "whereToLook": [
+        "Make sure you create a Scanner object to read the number of seconds from the keyboard.",
+        "Check that you print the prompt before you try to read the value the user typed.",
+        "Non-numeric input should not crash your program. Look at Scanner's hasNextInt() method for checking whether the next token is a valid integer before reading it."
+      ]
+    },
+    "validation": {
+      "title": "Input Validation",
+      "whereToLook": [
+        "Re-read the requirement: seconds must be a whole number of 1 or greater. Zero, negative numbers, and non-number input are all invalid.",
+        "When the input is invalid, print the exact error message, then print the original prompt again and read another value.",
+        "Keep asking until the user gives you a valid number of seconds before moving on to the chart."
+      ]
+    },
+    "loops": {
+      "title": "Building the Chart",
+      "whereToLook": [
+        "Use a loop that runs once for every second of the burn, from 1 up to the number of seconds entered.",
+        "Each time through the loop, print the current second and the current speed, then double the speed for the next second.",
+        "Keep a running total of every speed you print so you can display the final speed once the loop ends."
+      ]
+    },
+    "units": {
+      "title": "Meters vs. Kilometers",
+      "whereToLook": [
+        "The rocket's speed is easiest to calculate in meters per second, since it starts at a whole number (100) and doubles cleanly.",
+        "Only convert to kilometers per second when you print a value, by dividing the meters-per-second value by 1000.",
+        "The final speed is the total of every speed shown in the chart, added together in meters per second before converting to kilometers per second."
+      ]
+    }
+  },
+
+  "sourceChecks": [
+    {
+      "name": "Uses Scanner",
+      "type": "regex",
+      "pattern": "\\bScanner\\b",
+      "points": 2,
+      "message": "This challenge requires you to use a Scanner to read the number of seconds from the user."
+    },
+    {
+      "name": "Uses a loop",
+      "type": "regex",
+      "pattern": "\\b(for|while)\\s*\\(",
+      "points": 2,
+      "message": "You need a loop to build the chart one second at a time instead of writing out each line by hand."
+    },
+    {
+      "name": "Does not hard-code the sample final speed",
+      "type": "not_contains",
+      "pattern": "3.1km/s",
+      "points": 1,
+      "message": "Your source code contains the literal sample answer \"3.1km/s\". Calculate the final speed from the entered number of seconds instead of printing a fixed value."
+    }
+  ],
+
+  "tests": [
+    {
+      "name": "5 second burn",
+      "description": "Verifies the prompt, chart, and final speed for the example 5 second burn.",
+      "input": "5\n",
+      "expectedOutput": "How many seconds is the burn?\nSeconds\tTotal Speed\n1\t\t0.1km/s\n2\t\t0.2km/s\n3\t\t0.4km/s\n4\t\t0.8km/s\n5\t\t1.6km/s\nFinal speed:\t3.1km/s\n",
+      "comparison": "exact",
+      "points": 4,
+      "message": "Check the chart for a 5 second burn against the sample run in the README, including the header row and the final speed line.",
+      "possibleErrors": [
+        {
+          "type": "no_output",
+          "message": "Your program produced no output. Make sure you print the prompt and the chart to the console."
+        },
+        {
+          "type": "expected_missing",
+          "badText": "Final speed:",
+          "message": "Your output is missing the \"Final speed:\" line. This should print after the chart, showing the total of every speed shown."
+        }
+      ]
+    },
+    {
+      "name": "1 second burn",
+      "description": "Checks the smallest valid burn length, where the chart has only one row.",
+      "input": "1\n",
+      "expectedOutput": "How many seconds is the burn?\nSeconds\tTotal Speed\n1\t\t0.1km/s\nFinal speed:\t0.1km/s\n",
+      "comparison": "exact",
+      "points": 4,
+      "message": "For a 1 second burn, the chart should only have one row, and the final speed should equal that single row's speed."
+    },
+    {
+      "name": "Rejects a negative number of seconds",
+      "description": "Confirms the program re-prompts when given a negative number before accepting a valid burn length.",
+      "input": "-3\n3\n",
+      "expectedOutput": "How many seconds is the burn?\nThe number of seconds must be at least 1.\nHow many seconds is the burn?\nSeconds\tTotal Speed\n1\t\t0.1km/s\n2\t\t0.2km/s\n3\t\t0.4km/s\nFinal speed:\t0.7km/s\n",
+      "comparison": "exact",
+      "points": 4,
+      "message": "A negative number of seconds is invalid. Your program should print the error message, ask again, and only build the chart once a valid number is entered.",
+      "possibleErrors": [
+        {
+          "type": "runtime_error",
+          "message": "Your program crashed instead of rejecting the negative value. Make sure your validation check runs before you try to use the number of seconds."
+        }
+      ]
+    },
+    {
+      "name": "Rejects non-numeric input",
+      "description": "Confirms the program re-prompts instead of crashing when given non-numeric input.",
+      "input": "abc\n2\n",
+      "expectedOutput": "How many seconds is the burn?\nThe number of seconds must be at least 1.\nHow many seconds is the burn?\nSeconds\tTotal Speed\n1\t\t0.1km/s\n2\t\t0.2km/s\nFinal speed:\t0.3km/s\n",
+      "comparison": "exact",
+      "points": 4,
+      "message": "Non-number input is invalid. Your program should print the error message and ask again instead of crashing.",
+      "possibleErrors": [
+        {
+          "type": "runtime_error",
+          "message": "Your program crashed when given non-numeric input. Check whether the next token is a valid integer (for example with Scanner's hasNextInt() method) before reading it with nextInt()."
+        },
+        {
+          "type": "timeout",
+          "message": "Your program stopped responding. If non-numeric input isn't consumed, a loop that keeps re-reading it can run forever."
+        }
+      ]
+    },
+    {
+      "name": "7 second burn",
+      "description": "Uses a longer, unfamiliar burn length to confirm the chart and final speed are calculated rather than copied from the example.",
+      "input": "7\n",
+      "expectedOutput": "How many seconds is the burn?\nSeconds\tTotal Speed\n1\t\t0.1km/s\n2\t\t0.2km/s\n3\t\t0.4km/s\n4\t\t0.8km/s\n5\t\t1.6km/s\n6\t\t3.2km/s\n7\t\t6.4km/s\nFinal speed:\t12.7km/s\n",
+      "comparison": "exact",
+      "points": 4,
+      "message": "For a 7 second burn, the chart needs 7 rows and the final speed should be the total of all 7 speeds shown.",
+      "possibleErrors": [
+        {
+          "type": "hardcoded_output_hint",
+          "badText": "3.1km/s",
+          "message": "Your output contains 3.1km/s, which is the final speed for a 5 second burn from the README example, even though this test entered 7 seconds. Make sure your calculation uses the number of seconds the user actually entered."
+        }
+      ]
+    }
+  ]
+}
