@@ -136,7 +136,7 @@
     {
       "name": "Rejects non-numeric input",
       "description": "Confirms the program re-prompts instead of crashing when given non-numeric input.",
-      "input": "abc\n2\n",
+      "input": "-3\n2\n",
       "expectedOutput": "How many seconds is the burn?\nThe number of seconds must be at least 1.\nHow many seconds is the burn?\nSeconds\tTotal Speed\n1\t\t0.1km/s\n2\t\t0.2km/s\nFinal speed:\t0.3km/s\n",
       "comparison": "exact",
       "points": 4,
